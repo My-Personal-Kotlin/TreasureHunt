@@ -10,6 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.GeofencingClient
 import com.treasurehunt.databinding.ActivityHuntMainBinding
 
+private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
+private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
+private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
+private const val TAG = "HuntMainActivity"
+private const val LOCATION_PERMISSION_INDEX = 0
+private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
+
 class HuntMainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHuntMainBinding
@@ -21,12 +28,21 @@ class HuntMainActivity : AppCompatActivity() {
     // A PendingIntent for the Broadcast Receiver that handles geofence transitions.
     // TODO: Step 8 add in a pending intent
 
+
+    companion object {
+        internal const val ACTION_GEOFENCE_EVENT =
+            "HuntMainActivity.treasureHunt.action.ACTION_GEOFENCE_EVENT"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hunt_main)
+
         viewModel = ViewModelProvider(this, SavedStateViewModelFactory(this.application,
             this)
         ).get(GeofenceViewModel::class.java)
+
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         // TODO: Step 9 instantiate the geofencing client
@@ -94,7 +110,8 @@ class HuntMainActivity : AppCompatActivity() {
      * current hint isn't yet active.
      */
     private fun checkPermissionsAndStartGeofencing() {
-        if (viewModel.geofenceIsActive()) return
+        if (viewModel.geofenceIsActive())
+            return
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             checkDeviceLocationSettingsAndStartGeofence()
         } else {
@@ -146,15 +163,5 @@ class HuntMainActivity : AppCompatActivity() {
     private fun removeGeofences() {
         // TODO: Step 12 add in code to remove the geofences
     }
-    companion object {
-        internal const val ACTION_GEOFENCE_EVENT =
-            "HuntMainActivity.treasureHunt.action.ACTION_GEOFENCE_EVENT"
-    }
 }
 
-private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
-private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
-private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
-private const val TAG = "HuntMainActivity"
-private const val LOCATION_PERMISSION_INDEX = 0
-private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1

@@ -10,6 +10,10 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 
+private const val NOTIFICATION_ID = 33
+private const val CHANNEL_ID = "GeofenceChannel"
+
+
 fun createChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val notificationChannel = NotificationChannel(
@@ -38,18 +42,22 @@ fun createChannel(context: Context) {
  * with the LANDMARK_DATA from GeofencingConstatns in the GeofenceUtils file.
  */
 fun NotificationManager.sendGeofenceEnteredNotification(context: Context, foundIndex: Int) {
+
     val contentIntent = Intent(context, HuntMainActivity::class.java)
     contentIntent.putExtra(GeofencingConstants.EXTRA_GEOFENCE_INDEX, foundIndex)
+
     val contentPendingIntent = PendingIntent.getActivity(
         context,
         NOTIFICATION_ID,
         contentIntent,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
+
     val mapImage = BitmapFactory.decodeResource(
         context.resources,
         R.drawable.map_small
     )
+
     val bigPicStyle = NotificationCompat.BigPictureStyle()
         .bigPicture(mapImage)
         .bigLargeIcon(null)
@@ -68,8 +76,5 @@ fun NotificationManager.sendGeofenceEnteredNotification(context: Context, foundI
 
     notify(NOTIFICATION_ID, builder.build())
 }
-
-private const val NOTIFICATION_ID = 33
-private const val CHANNEL_ID = "GeofenceChannel"
 
 

@@ -31,6 +31,9 @@ data class LandmarkDataObject(val id: String, val hint: Int, val name: Int, val 
 
 internal object GeofencingConstants {
 
+    const val GEOFENCE_RADIUS_IN_METERS = 100f
+    const val EXTRA_GEOFENCE_INDEX = "GEOFENCE_INDEX"
+
     /**
      * Used to set an expiration time for a geofence. After this amount of time, Location services
      * stops tracking the geofence. For this sample, geofences expire after one hour.
@@ -62,8 +65,5 @@ internal object GeofencingConstants {
             R.string.union_square_location,
             LatLng(37.788151, -122.407570))
     )
-
     val NUM_LANDMARKS = LANDMARK_DATA.size
-    const val GEOFENCE_RADIUS_IN_METERS = 100f
-    const val EXTRA_GEOFENCE_INDEX = "GEOFENCE_INDEX"
 }
